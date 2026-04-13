@@ -42,7 +42,7 @@ export default function Students() {
       updateStudent(editStudent.id, { ...form, rollNo: parseInt(form.rollNo) });
       toast.success("Student updated");
     } else {
-      addStudent({ ...form, rollNo: parseInt(form.rollNo), id: "" });
+      addStudent({ ...form, rollNo: parseInt(form.rollNo) });
       toast.success("Student added");
     }
     setDialogOpen(false);
