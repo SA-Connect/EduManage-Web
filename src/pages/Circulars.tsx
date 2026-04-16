@@ -29,7 +29,7 @@ export default function Circulars() {
 
   const handleAdd = () => {
     if (!form.title) { toast.error("Title is required"); return; }
-    addCircular({ ...form, date: new Date().toISOString().slice(0, 10), author: role === "admin" ? "Admin" : "Staff" });
+    addCircular({ ...form, date: new Date().toISOString().slice(0, 10), author: role === "principal" ? "Principal" : "Staff" });
     toast.success("Circular published");
     setDialogOpen(false);
     setForm({ title: "", description: "", category: "Academic" });

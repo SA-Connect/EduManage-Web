@@ -54,7 +54,7 @@ export default function AcademicCalendar() {
     <div className="space-y-4 animate-fade-in">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Academic Calendar</h1>
-        {role === "admin" && (
+        {role === "principal" && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add Event</Button></DialogTrigger>
             <DialogContent>
