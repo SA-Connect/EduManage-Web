@@ -42,8 +42,6 @@ export function Sidebar() {
   const isAdmin = location.pathname.startsWith('/admin')
   const items = isAdmin ? superAdminNavItems : orgNavItems
 
-  console.log('Sidebar rendering, path:', location.pathname)
-
   return (
     <aside
       className={cn(

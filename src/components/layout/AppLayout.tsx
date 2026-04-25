@@ -2,8 +2,6 @@ import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 
-console.log('AppLayout rendering')
-
 export function AppLayout() {
   return (
     <div className="flex min-h-screen w-full bg-background">
