@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import { Providers } from './providers'
+import { AuthProvider } from '@/store/auth'
 
 function Loading() {
   return (
@@ -14,9 +15,11 @@ function Loading() {
 function App() {
   return (
     <Providers>
-      <Suspense fallback={<Loading />}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <AuthProvider>
+        <Suspense fallback={<Loading />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </AuthProvider>
     </Providers>
   )
 }

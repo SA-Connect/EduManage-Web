@@ -1,13 +1,15 @@
+import { ReactNode } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/store/auth'
 import { Role } from '@/types/api.types'
 
 interface Props {
   allowedRoles: Role[]
+  children?: ReactNode
 }
 
-export function ProtectedRoute({ allowedRoles }: Props) {
-  const { isAuthenticated, user } = useAuthStore()
+export function ProtectedRoute({ allowedRoles, children }: Props) {
+  const { user, isAuthenticated } = useAuth()
   const location = useLocation()
 
   if (!isAuthenticated) {
@@ -15,8 +17,8 @@ export function ProtectedRoute({ allowedRoles }: Props) {
   }
 
   if (user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />
+    return <Navigate to="/login" replace />
   }
 
-  return <Outlet />
+  return children ? <>{children}</> : <Outlet />
 }

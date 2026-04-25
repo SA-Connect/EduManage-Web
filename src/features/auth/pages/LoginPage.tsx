@@ -1,22 +1,7 @@
 import { useState } from 'react'
-import { GraduationCap, Shield, User, Users, BookOpen, ArrowRight, Sun, Moon } from 'lucide-react'
-import { useAuthStore } from '@/store/authStore'
-import { Role, LoginResponse, LoginRequest } from '@/types/api.types'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import api from '@/lib/axios'
-
-const roles: { value: Role; label: string; description: string; icon: React.ElementType; gradient: string }[] = [
-  { value: 'SUPER_ADMIN', label: 'Super Admin', description: 'Platform administrator — manage organizations & permissions', icon: Shield, gradient: 'from-purple-500 to-indigo-600' },
-  { value: 'ORGANIZATION_ADMIN', label: 'Principal', description: 'Full school access — manage staff, students & operations', icon: GraduationCap, gradient: 'from-blue-500 to-indigo-600' },
-  { value: 'ACCOUNTANT', label: 'Accountant', description: 'Fee collection, reports & financial management', icon: User, gradient: 'from-green-500 to-teal-600' },
-  { value: 'TEACHER', label: 'Staff', description: 'Teaching & non-teaching — attendance, grades & materials', icon: Users, gradient: 'from-emerald-500 to-teal-600' },
-  { value: 'STUDENT', label: 'Student', description: 'View grades, attendance, timetable & learning materials', icon: BookOpen, gradient: 'from-amber-500 to-orange-600' },
-]
-
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GraduationCap, Shield, User, Users, BookOpen, ArrowRight, Mail, Lock } from 'lucide-react'
-import { useAuthStore } from '@/store/authStore'
+import { useAuth } from '@/store/auth'
 import { Role, LoginRequest } from '@/types/api.types'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,7 +17,8 @@ const roles: { value: Role; label: string; description: string; icon: React.Elem
 ]
 
 export default function LoginPage() {
-  const { setAuth } = useAuthStore()
+  const { setAuth } = useAuth()
+  const navigate = useNavigate()
   const [selectedRole, setSelectedRole] = useState<Role>('ORGANIZATION_ADMIN')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [email, setEmail] = useState('')
@@ -49,22 +35,22 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const request: LoginRequest = { email, password }
-      const response = await api.post<LoginRequest & { token: string; userId: string; firstName: string; lastName: string; role: Role; organizationId: string }>('/auth/login', request)
-      const { token, userId, firstName, lastName, role, organizationId } = response.data
+      const request: LoginRequest = { email, password, role: selectedRole }
+      const response = await api.post<{ success: boolean; data: { token: string; userId: string; email: string; firstName: string; lastName: string; role: Role; organizationId: string } }>('/auth/login', request)
+      const { token, userId, email: responseEmail, firstName, lastName, role, organizationId } = response.data.data
 
       const user = {
         id: userId,
         firstName,
         lastName,
-        email,
+        email: responseEmail,
         mobile: '',
         role,
         organizationId,
         organizationName: '',
       }
       setAuth(user, token)
-      window.location.href = '/dashboard'
+      navigate(role === 'SUPER_ADMIN' ? '/admin/dashboard' : '/dashboard', { replace: true })
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { message?: string } } }
       setError(axiosError.response?.data?.message || 'Login failed. Please check your credentials.')
@@ -159,7 +145,7 @@ export default function LoginPage() {
           </Button>
 
           <p className="text-center text-xs text-muted-foreground mt-6">
-            This is a demo portal. No real credentials are required.
+            Sign in with your actual account and matching role.
           </p>
         </div>
       </div>

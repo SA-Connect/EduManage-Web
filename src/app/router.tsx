@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
+import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
@@ -25,8 +26,7 @@ export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
 
   {
-    path: '/',
-    element: <AppLayout />,
+    element: <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'ORGANIZATION_ADMIN', 'TEACHER', 'ACCOUNTANT', 'STUDENT']}><AppLayout /></ProtectedRoute>,
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <DashboardPage /> },
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
 
   {
     path: '/admin',
-    element: <AppLayout />,
+    element: <ProtectedRoute allowedRoles={['SUPER_ADMIN']}><AppLayout /></ProtectedRoute>,
     children: [
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: 'dashboard', element: <SuperAdminDashboardPage /> },
