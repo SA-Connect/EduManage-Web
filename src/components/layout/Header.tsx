@@ -13,8 +13,6 @@ export function Header() {
   const [globalSearch, setGlobalSearch] = useState('')
   const notifRef = useRef<HTMLDivElement>(null)
 
-  console.log('Header rendering')
-
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (notifRef.current && !notifRef.current.contains(e.target as Node)) setShowNotif(false)

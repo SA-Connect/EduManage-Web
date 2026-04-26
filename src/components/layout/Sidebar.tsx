@@ -1,8 +1,8 @@
-import { useLocation, Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard, Users, ClipboardCheck, Calendar, FileText, DollarSign,
   Building, Megaphone, CalendarDays, PartyPopper, BookOpen, Bus,
-  GraduationCap, Settings, Shield, Building2, ChevronLeft, ChevronRight,
+  GraduationCap, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
@@ -28,19 +28,8 @@ const orgNavItems: NavItem[] = [
   { label: 'Learning', icon: BookOpen, path: '/learning' },
 ]
 
-const superAdminNavItems: NavItem[] = [
-  { label: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
-  { label: 'Organizations', icon: Building2, path: '/admin/organizations' },
-  { label: 'Permissions', icon: Shield, path: '/admin/permissions' },
-  { label: 'Settings', icon: Settings, path: '/admin/settings' },
-]
-
 export function Sidebar() {
-  const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
-
-  const isAdmin = location.pathname.startsWith('/admin')
-  const items = isAdmin ? superAdminNavItems : orgNavItems
 
   return (
     <aside
@@ -64,28 +53,27 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         {!collapsed && (
           <p className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 px-3 mb-2">
-            {isAdmin ? 'Platform' : 'Menu'}
+            Menu
           </p>
         )}
-        {items.map((item) => {
-          const active = location.pathname === item.path
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
+        {orgNavItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
-                active
+                isActive
                   ? 'bg-blue-600 text-white'
                   : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-              )}
-              title={collapsed ? item.label : undefined}
-            >
-              <item.icon className="h-[18px] w-[18px] shrink-0" />
-              {!collapsed && <span>{item.label}</span>}
-            </Link>
-          )
-        })}
+              )
+            }
+            title={collapsed ? item.label : undefined}
+          >
+            <item.icon className="h-[18px] w-[18px] shrink-0" />
+            {!collapsed && <span>{item.label}</span>}
+          </NavLink>
+        ))}
       </nav>
 
       <button

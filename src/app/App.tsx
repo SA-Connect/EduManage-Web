@@ -3,20 +3,19 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
 import { Providers } from './providers'
 import { AuthProvider } from '@/store/auth'
-
-function Loading() {
-  return (
-    <div className="flex min-h-[400px] items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    </div>
-  )
-}
+import { Spinner } from '@/components/ui/spinner'
 
 function App() {
   return (
     <Providers>
       <AuthProvider>
-        <Suspense fallback={<Loading />}>
+        <Suspense
+          fallback={
+            <div className="flex min-h-screen items-center justify-center">
+              <Spinner size="xl" />
+            </div>
+          }
+        >
           <RouterProvider router={router} />
         </Suspense>
       </AuthProvider>

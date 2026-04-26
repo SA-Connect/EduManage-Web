@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy } from 'react'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
+import { ALLOWED_ROLES } from '@/types/api.types'
 
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
@@ -16,17 +17,13 @@ const CircularsPage = lazy(() => import('@/features/communication/pages/Circular
 const AcademicCalendarPage = lazy(() => import('@/features/academic/pages/AcademicCalendarPage'))
 const EventsPage = lazy(() => import('@/features/events/pages/EventsPage'))
 const LearningPage = lazy(() => import('@/features/learning/pages/LearningPage'))
-const SuperAdminDashboardPage = lazy(() => import('@/features/superadmin/pages/SuperAdminDashboardPage'))
-const OrganizationsPage = lazy(() => import('@/features/superadmin/pages/OrganizationsPage'))
-const PermissionsPage = lazy(() => import('@/features/superadmin/pages/PermissionsPage'))
-const SettingsPage = lazy(() => import('@/features/superadmin/pages/SettingsPage'))
 const NotFoundPage = lazy(() => import('@/features/auth/pages/NotFoundPage'))
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
 
   {
-    element: <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'ORGANIZATION_ADMIN', 'TEACHER', 'ACCOUNTANT', 'STUDENT']}><AppLayout /></ProtectedRoute>,
+    element: <ProtectedRoute allowedRoles={ALLOWED_ROLES}><AppLayout /></ProtectedRoute>,
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: 'dashboard', element: <DashboardPage /> },
@@ -41,18 +38,6 @@ export const router = createBrowserRouter([
       { path: 'calendar', element: <AcademicCalendarPage /> },
       { path: 'events', element: <EventsPage /> },
       { path: 'learning', element: <LearningPage /> },
-    ],
-  },
-
-  {
-    path: '/admin',
-    element: <ProtectedRoute allowedRoles={['SUPER_ADMIN']}><AppLayout /></ProtectedRoute>,
-    children: [
-      { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-      { path: 'dashboard', element: <SuperAdminDashboardPage /> },
-      { path: 'organizations', element: <OrganizationsPage /> },
-      { path: 'permissions', element: <PermissionsPage /> },
-      { path: 'settings', element: <SettingsPage /> },
     ],
   },
 

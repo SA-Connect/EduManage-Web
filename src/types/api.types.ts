@@ -15,31 +15,32 @@ export interface PageMeta {
 }
 
 export type Role =
-  | 'SUPER_ADMIN'
   | 'ORGANIZATION_ADMIN'
   | 'TEACHER'
   | 'ACCOUNTANT'
   | 'HR_MANAGER'
   | 'LIBRARIAN'
-  | 'PARENT'
-  | 'STUDENT'
+
+export const ALLOWED_ROLES: Role[] = [
+  'ORGANIZATION_ADMIN',
+  'TEACHER',
+  'ACCOUNTANT',
+  'HR_MANAGER',
+  'LIBRARIAN',
+]
 
 export interface AuthUser {
   id: string
   firstName: string
   lastName: string
   email: string
-  mobile: string
   role: Role
   organizationId: string
-  organizationName?: string
 }
 
 export interface LoginRequest {
   email: string
   password: string
-  organizationId?: string
-  role?: Role
 }
 
 export interface LoginResponse {
